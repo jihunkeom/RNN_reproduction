@@ -25,13 +25,12 @@ class Seq2Seq(nn.Module):
             output, attentional_vector, hidden, cell = self.decoder(tgt_input, hidden, cell, enc_output, src_mask, attentional_vector)
             dec_outputs[t] = output
 
-            # teacher forcing
             if teacher_forcing > 0:
                 if random.random() < teacher_forcing_ratio:
                     tgt_input = tgt[t, :]
                 else:
                     tgt_input = output.argmax(2).squeeze(0)
-            # No teacher forcing
+            
             else:
                 tgt_input = tgt[t, :]
 
@@ -77,13 +76,11 @@ class LocalSeq2Seq(nn.Module):
             output, attentional_vector, hidden, cell = self.decoder(tgt_input, hidden, cell, enc_output, src_mask, attentional_vector, t)
             dec_outputs[t] = output
 
-            # teacher forcing
             if teacher_forcing > 0:
                 if random.random() < teacher_forcing_ratio:
                     tgt_input = tgt[t, :]
                 else:
                     tgt_input = output.argmax(2).squeeze(0)
-            # No teacher forcing
             else:
                 tgt_input = tgt[t, :]
 
